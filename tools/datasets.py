@@ -1,7 +1,7 @@
 import imagenet_models
 import torch as ch
 import os
-from torchvision import transforms
+from torchvision import transforms, models
 from tools import folder
 from torch.utils.data import DataLoader
 
@@ -103,4 +103,27 @@ class ImageNet(DataSet):
         """
         return imagenet_models.__dict__[arch](num_classes=self.num_classes, 
                                         pretrained=pretrained)
+
+
+class ImageNetMVP(DataSet):
+    '''
+    '''
+    def __init__(self, data_path, model_checkpoint, **kwargs):
+        """
+        """
+        ds_name = 'ImageNet'
+        ds_kwargs = {
+            'num_classes': 9,
+            'mean': ch.tensor([0.485, 0.456, 0.406]),
+            'std': ch.tensor([0.229, 0.224, 0.225]),
+            'transform_test': transforms.ToTensor()
+        }
+        super(ImageNetMVP, self).__init__(ds_name,
+                data_path, **ds_kwargs)
+        self.checkpoint = model_checkpoint
+        
+    def get_model(self, arch, pretrained):
+        """
+        """
+        return models.resnet18(num_classes=9)
 

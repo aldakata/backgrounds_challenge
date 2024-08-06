@@ -7,7 +7,7 @@ import os
 import time
 from argparse import ArgumentParser
 from PIL import Image
-from tools.datasets import ImageNet, ImageNet9
+from tools.datasets import ImageNet, ImageNet9, ImageNetMVP
 from tools.model_utils import make_and_restore_model, adv_bgs_eval_model
 
 
@@ -23,9 +23,9 @@ parser.add_argument('--in9', dest='in9', default=False, action='store_true',
 
 
 def main(args):
-    map_to_in9 = {}
-    with open('in_to_in9.json', 'r') as f:
-        map_to_in9.update(json.load(f))
+    map_to_in9 = {94: 0, 105: 1, 554: 5, 562: 6, 466: 4, 682: 7, 288: 2, 309: 3, 752: 8} # MVP albert
+    # with open('in_to_in9.json', 'r') as f:
+    #     map_to_in9.update(json.load(f))
 
     BASE_PATH_TO_EVAL = args.data_path
     BATCH_SIZE = 32
@@ -34,10 +34,11 @@ def main(args):
     # Load model
     in9_trained = args.in9
     arch = args.arch
-    if in9_trained:
-        train_ds = ImageNet9('/tmp')
-    else:
-        train_ds = ImageNet('/tmp')
+    # if in9_trained:
+    #     train_ds = ImageNet9('/tmp')
+    # else:
+    #     train_ds = ImageNet('/tmp')
+    train_ds = ImageNetMVP("/tmp")
     checkpoint = args.checkpoint
     if checkpoint is None:
         model, _ = make_and_restore_model(arch=arch, dataset=train_ds,

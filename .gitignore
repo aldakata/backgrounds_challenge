@@ -1,1 +1,7 @@
 */__pycache__
+*bg_challenge/
+*.tar.gz
+*.JPEG
+*.npy
+*.pt
+*.pth
